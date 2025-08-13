@@ -27,7 +27,7 @@ jobs:
           sed -i -e "s|CLIENT_VERSION_REPLACE|$(date +%s)|g" web/index.html
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.x'
+          flutter-version: '3.32.x'
       - run: flutter pub get
       #- run: flutter test
       - run: dart format --set-exit-if-changed lib
