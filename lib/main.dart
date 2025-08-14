@@ -62,13 +62,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _loadCached() async {
-  final cache = await _service.getCachedPrice(_source);
+    final cache = await _service.getCachedPrice(_source);
     if (!mounted) return;
     if (cache != null) {
       setState(() {
-    _previousPrice = cache.value;
-    _currentPrice = cache.value;
-    _previousTimestamp = cache.timestamp;
+        _previousPrice = cache.value;
+        _currentPrice = cache.value;
+        _previousTimestamp = cache.timestamp;
       });
     }
   }
@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _source = match.first;
       }
     }
-  _epsilon = prefs.getDouble(_prefsKeyEpsilon) ?? 0.0;
+    _epsilon = prefs.getDouble(_prefsKeyEpsilon) ?? 0.0;
     if (mounted) setState(() {});
   }
 
@@ -179,7 +179,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   final selected = await Navigator.of(context)
                       .push<SettingsResult>(
                         MaterialPageRoute(
-                          builder: (_) => SettingsPage(initialSource: _source, initialEpsilon: _epsilon),
+                          builder: (_) => SettingsPage(
+                            initialSource: _source,
+                            initialEpsilon: _epsilon,
+                          ),
                         ),
                       );
                   if (selected != null && mounted) {

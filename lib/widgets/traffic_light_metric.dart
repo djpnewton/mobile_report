@@ -14,14 +14,14 @@ class TrafficLightMetric extends StatelessWidget {
     this.epsilon = 0.0,
     this.showArrow = true,
     this.compact = false,
-  this.upColor = Colors.green,
-  this.sameColor = Colors.orange,
-  this.downColor = Colors.red,
-  this.valueStyle,
-  this.labelStyle,
-  this.previousStyle,
-  this.previousTimestamp,
-  this.showPrevious = true,
+    this.upColor = Colors.green,
+    this.sameColor = Colors.orange,
+    this.downColor = Colors.red,
+    this.valueStyle,
+    this.labelStyle,
+    this.previousStyle,
+    this.previousTimestamp,
+    this.showPrevious = true,
     this.iconSize = 20,
     this.spacing = 8,
   });
@@ -44,7 +44,11 @@ class TrafficLightMetric extends StatelessWidget {
   final double iconSize;
   final double spacing;
 
-  static Trend computeTrend({required num current, required num previous, double epsilon = 0.0}) {
+  static Trend computeTrend({
+    required num current,
+    required num previous,
+    double epsilon = 0.0,
+  }) {
     final diff = current - previous;
     if (diff > epsilon) return Trend.up;
     if (diff < -epsilon) return Trend.down;
@@ -53,11 +57,15 @@ class TrafficLightMetric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trend = computeTrend(current: current, previous: previous, epsilon: epsilon);
+    final trend = computeTrend(
+      current: current,
+      previous: previous,
+      epsilon: epsilon,
+    );
     final color = switch (trend) {
-  Trend.up => upColor,
-  Trend.same => sameColor,
-  Trend.down => downColor,
+      Trend.up => upColor,
+      Trend.same => sameColor,
+      Trend.down => downColor,
     };
     final icon = switch (trend) {
       Trend.up => Icons.arrow_upward,
@@ -65,11 +73,16 @@ class TrafficLightMetric extends StatelessWidget {
       Trend.down => Icons.arrow_downward,
     };
     final valueText = format?.call(current) ?? current.toString();
-  final prevText = format?.call(previous) ?? previous.toString();
+    final prevText = format?.call(previous) ?? previous.toString();
 
-    final valueTextStyle = (valueStyle ?? Theme.of(context).textTheme.titleMedium)?.copyWith(color: color);
-    final labelTextStyle = labelStyle ?? Theme.of(context).textTheme.labelMedium;
-  final prevTextStyle = previousStyle ?? Theme.of(context).textTheme.bodySmall;
+    final valueTextStyle =
+        (valueStyle ?? Theme.of(context).textTheme.titleMedium)?.copyWith(
+          color: color,
+        );
+    final labelTextStyle =
+        labelStyle ?? Theme.of(context).textTheme.labelMedium;
+    final prevTextStyle =
+        previousStyle ?? Theme.of(context).textTheme.bodySmall;
 
     final content = Column(
       mainAxisSize: MainAxisSize.min,
@@ -79,8 +92,7 @@ class TrafficLightMetric extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (showArrow)
-              Icon(icon, color: color, size: iconSize),
+            if (showArrow) Icon(icon, color: color, size: iconSize),
             if (showArrow) SizedBox(width: spacing),
             Text(valueText, style: valueTextStyle),
           ],
@@ -91,7 +103,9 @@ class TrafficLightMetric extends StatelessWidget {
             previousTimestamp != null
                 ? 'Prev: $prevText • ${_timeAgo(previousTimestamp!)}'
                 : 'Prev: $prevText',
-            style: (prevTextStyle ?? const TextStyle()).copyWith(color: Colors.grey),
+            style: (prevTextStyle ?? const TextStyle()).copyWith(
+              color: Colors.grey,
+            ),
           ),
       ],
     );
@@ -112,7 +126,8 @@ class TrafficLightMetric extends StatelessWidget {
 
 enum Trend { up, same, down }
 
-String _pluralize(int count, String unit) => count == 1 ? '$count $unit ago' : '$count ${unit}s ago';
+String _pluralize(int count, String unit) =>
+    count == 1 ? '$count $unit ago' : '$count ${unit}s ago';
 
 String _timeAgo(DateTime ts) {
   final now = DateTime.now();
@@ -127,4 +142,3 @@ String _timeAgo(DateTime ts) {
   final years = (months / 12).floor();
   return _pluralize(years, 'year');
 }
-

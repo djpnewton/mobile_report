@@ -34,13 +34,13 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop(SettingsResult(source: _source, epsilon: _epsilon));
+        Navigator.of(
+          context,
+        ).pop(SettingsResult(source: _source, epsilon: _epsilon));
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Settings'),
-        ),
+        appBar: AppBar(title: const Text('Settings')),
         body: ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -51,7 +51,10 @@ class _SettingsPageState extends State<SettingsPage> {
             const Divider(),
             const Padding(
               padding: EdgeInsets.only(bottom: 8.0),
-              child: Text('Metric Source', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(
+                'Metric Source',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             RadioListTile<MetricSource>(
               title: Text(MetricSource.bitcoin.label),
@@ -74,14 +77,20 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(height: 16),
             const Padding(
               padding: EdgeInsets.only(bottom: 8.0),
-              child: Text('Epsilon (treat small changes as "same")', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(
+                'Epsilon (treat small changes as "same")',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _epsController,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: false),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                      signed: false,
+                    ),
                     decoration: const InputDecoration(
                       labelText: 'Epsilon',
                       helperText: 'Enter a non-negative number',
@@ -89,7 +98,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     onChanged: (text) {
                       final v = double.tryParse(text.replaceAll(',', '.'));
-                      setState(() => _epsilon = (v == null || v.isNaN || v < 0) ? 0.0 : v);
+                      setState(
+                        () => _epsilon = (v == null || v.isNaN || v < 0)
+                            ? 0.0
+                            : v,
+                      );
                     },
                   ),
                 ),

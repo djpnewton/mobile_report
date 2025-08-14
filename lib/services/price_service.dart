@@ -29,7 +29,8 @@ class PriceService {
   Future<double> _fetchBtcUsd() async {
     final uri = Uri.parse('https://api.coinbase.com/v2/prices/BTC-USD/spot');
     final res = await _client.get(uri);
-    if (res.statusCode != 200) throw Exception('BTC fetch failed ${res.statusCode}');
+    if (res.statusCode != 200)
+      throw Exception('BTC fetch failed ${res.statusCode}');
     final data = json.decode(res.body) as Map<String, dynamic>;
     final rate = (data['data']?['amount']) as String?;
     if (rate == null) throw Exception('BTC price missing');
@@ -48,12 +49,15 @@ class PriceService {
   }
 
   Future<double> _fetchMacrodashServerQuote(String symbol) async {
-    final uri = Uri.parse('https://macrodash-server.fly.dev/market/custom?ticker1=$symbol&interval=oneMinute&range=oneDay');
+    final uri = Uri.parse(
+      'https://macrodash-server.fly.dev/market/custom?ticker1=$symbol&interval=oneMinute&range=oneDay',
+    );
     final res = await _client.get(uri);
     if (res.statusCode != 200) {
       throw Exception('Macrodash fetch failed ${res.statusCode} for $symbol');
     }
-    final Map<String, dynamic> data = json.decode(res.body) as Map<String, dynamic>;
+    final Map<String, dynamic> data =
+        json.decode(res.body) as Map<String, dynamic>;
     final result = data['priceData'].last['amount'];
     if (result is num) return result.toDouble();
     throw Exception('Macrodash price missing for $symbol');
@@ -110,18 +114,27 @@ class PriceService {
             .whereType<Map>()
             .map((m) {
               final num? v = m['value'] as num?;
-              final int? ts = m['ts'] is int ? m['ts'] as int : int.tryParse('${m['ts']}');
+              final int? ts = m['ts'] is int
+                  ? m['ts'] as int
+                  : int.tryParse('${m['ts']}');
               if (v == null || ts == null) return null;
-              return PriceCache(v.toDouble(), DateTime.fromMillisecondsSinceEpoch(ts));
+              return PriceCache(
+                v.toDouble(),
+                DateTime.fromMillisecondsSinceEpoch(ts),
+              );
             })
             .whereType<PriceCache>()
             .toList(growable: false);
       } else if (decoded is Map<String, dynamic>) {
         // Legacy single-object cache -> wrap as one-sample list
         final num? v = decoded['value'] as num?;
-        final int? ts = decoded['ts'] is int ? decoded['ts'] as int : int.tryParse('${decoded['ts']}');
+        final int? ts = decoded['ts'] is int
+            ? decoded['ts'] as int
+            : int.tryParse('${decoded['ts']}');
         if (v == null || ts == null) return [];
-        return [PriceCache(v.toDouble(), DateTime.fromMillisecondsSinceEpoch(ts))];
+        return [
+          PriceCache(v.toDouble(), DateTime.fromMillisecondsSinceEpoch(ts)),
+        ];
       }
       return [];
     } catch (_) {
