@@ -22,6 +22,7 @@ class TrafficLightMetric extends StatelessWidget {
     this.previousStyle,
     this.previousTimestamp,
     this.showPrevious = true,
+    this.onShowTuta,
     this.iconSize = 20,
     this.spacing = 8,
   });
@@ -41,6 +42,7 @@ class TrafficLightMetric extends StatelessWidget {
   final TextStyle? previousStyle;
   final DateTime? previousTimestamp;
   final bool showPrevious;
+  final VoidCallback? onShowTuta;
   final double iconSize;
   final double spacing;
 
@@ -99,13 +101,31 @@ class TrafficLightMetric extends StatelessWidget {
         ),
         if (showPrevious) SizedBox(height: spacing / 2),
         if (showPrevious)
-          Text(
-            previousTimestamp != null
-                ? 'Prev: $prevText • ${_timeAgo(previousTimestamp!)}'
-                : 'Prev: $prevText',
-            style: (prevTextStyle ?? const TextStyle()).copyWith(
-              color: Colors.grey,
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                previousTimestamp != null
+                    ? 'Prev: $prevText • ${_timeAgo(previousTimestamp!)}'
+                    : 'Prev: $prevText',
+                style: (prevTextStyle ?? const TextStyle()).copyWith(
+                  color: Colors.grey,
+                ),
+              ),
+              if (onShowTuta != null) SizedBox(width: spacing),
+              if (onShowTuta != null)
+                IconButton(
+                  tooltip: 'Show TUTA',
+                  onPressed: onShowTuta,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    minWidth: 28,
+                    minHeight: 28,
+                  ),
+                  icon: const Icon(Icons.show_chart),
+                  color: Colors.grey,
+                ),
+            ],
           ),
       ],
     );

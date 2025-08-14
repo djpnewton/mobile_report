@@ -6,6 +6,7 @@ import 'services/price_service.dart';
 import 'widgets/traffic_light_metric.dart';
 import 'pages/settings_page.dart';
 import 'pages/about_page.dart';
+import 'pages/tuta_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -149,8 +150,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       drawer: Drawer(
@@ -227,6 +226,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   current: (_currentPrice ?? _previousPrice ?? 0),
                   previousTimestamp: _previousTimestamp,
                   epsilon: _epsilon,
+                  onShowTuta: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => TutaPage(source: _source),
+                      ),
+                    );
+                  },
                   spacing: 16,
                   iconSize: 96,
                   valueStyle: Theme.of(context).textTheme.displayLarge,
