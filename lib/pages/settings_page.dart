@@ -32,12 +32,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) {
+          return;
+        }
         Navigator.of(
           context,
         ).pop(SettingsResult(source: _source, epsilon: _epsilon));
-        return false;
       },
       child: Scaffold(
         appBar: AppBar(title: const Text('Settings')),

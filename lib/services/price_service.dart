@@ -29,8 +29,9 @@ class PriceService {
   Future<double> _fetchBtcUsd() async {
     final uri = Uri.parse('https://api.coinbase.com/v2/prices/BTC-USD/spot');
     final res = await _client.get(uri);
-    if (res.statusCode != 200)
+    if (res.statusCode != 200) {
       throw Exception('BTC fetch failed ${res.statusCode}');
+    }
     final data = json.decode(res.body) as Map<String, dynamic>;
     final rate = (data['data']?['amount']) as String?;
     if (rate == null) throw Exception('BTC price missing');
